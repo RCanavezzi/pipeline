@@ -4,5 +4,14 @@ def ex16_convert_parquet_to_iceberg(spark: SparkSession, table: str, path: str) 
     """
     Converte tabela Parquet em Iceberg SET TBLPROPERTIES('format-version'='2').
     """
-    # TODO
-    raise NotImplementedError
+
+    query = f"""
+        CREATE OR REPLACE TABLE {table}
+        USING iceberg
+        TBLPROPERTIES('format-version' = '2')
+        AS
+        SELECT * FROM parquet.`{path}`
+    """
+    
+    # 2. Executa a consulta
+    spark.sql(query)
